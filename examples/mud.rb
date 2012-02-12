@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+
+$: << File.join(File.dirname(__FILE__), "../lib")
+
+require 'prompt'
+require 'prompt/console'
+
+extend Prompt::DSL
+
+GRUE = 3
+@moves = 0
+
+desc "Move"
+
+variable :direction, "A cardinal direction", %w(north east south west)
+
+command "go :direction", "Walk in the specified direction" do |direction|
+  puts "You walked #{direction}"
+  @moves += 1
+  if @moves > GRUE
+  	puts "You have been eaten by a grue"
+  	exit
+  end
+end
+
+desc "Interact"
+
+command "look", "Look around" do
+  if @moves < GRUE
+  	puts "You're in a nice, well-lit room"
+  else
+  	puts "It is pitch black. You are likely to be eaten by a grue."
+  end
+end
+
+command "say :something", "Say something" do |something|
+  puts "You say '#{something}'"
+end
+
+Prompt::Console.start
