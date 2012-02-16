@@ -136,7 +136,7 @@ end
 
 ## Configuration options
 
-The default prompt `"> "` can be changed before starting the console, or while it's running.
+The default prompt `"> "` can be changed before starting the console.
 
 ```ruby
 Prompt::Console.prompt = "#{Dir.pwd}> "
