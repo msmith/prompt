@@ -2,7 +2,7 @@
 
 ## What is this?
 
-Prompt makes it easy to build slick command-line applications with [Tab Completion](#tabcompletion), [Command History](#commandhistory), and [Built-in Help](#built-inhelp)
+Prompt makes it easy to build slick command-line applications with Tab Completion, Command History, and Built-in Help
 
 ## Installation
 
