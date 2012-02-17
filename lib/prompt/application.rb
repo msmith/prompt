@@ -4,9 +4,11 @@ require 'prompt/command'
 module Prompt
   class Application
     attr :command_groups
+    attr_accessor :prompt
 
     def initialize
       @command_groups = []
+      @prompt = "> "
     end
 
     def use_command_group desc

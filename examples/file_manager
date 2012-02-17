@@ -4,7 +4,12 @@ require 'prompt'
 
 extend Prompt::DSL
 
+def change_prompt dir
+  Prompt.application.prompt = "#{@pwd}> "
+end
+
 @pwd = File.absolute_path Dir.pwd
+change_prompt @pwd
 
 dynamic_variable :dir, "Directory" do
   Dir.entries(@pwd).select do |e|
@@ -14,6 +19,7 @@ end
 
 command "cd :dir", "Change directory" do |dir|
   @pwd = File.absolute_path File.join(@pwd, dir)
+  change_prompt @pwd
 end
 
 command "ls", "List files" do

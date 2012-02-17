@@ -5,15 +5,12 @@ module Prompt
   module Console
 
     HISTORY_MAX_SIZE = 100
-    PROMPT = "> "
 
     CompletionProc = proc do |s|
       Prompt.application.completions(s)
     end
 
     def self.start(history_file = nil)
-      @prompt = PROMPT
-
       # Store the state of the terminal
       stty_save = `stty -g`.chomp
       # and restore it when exiting
@@ -28,21 +25,13 @@ module Prompt
 
       load_history history_file if history_file
 
-      while line = Readline.readline(@prompt, true)
+      while line = Readline.readline(Prompt.application.prompt, true)
         begin
           Prompt.application.exec(line).nil?
         rescue ::Prompt::CommandNotFound => e
           STDERR.puts e.message
         end
       end
-    end
-
-    def self.prompt= prompt
-      @prompt = prompt
-    end
-
-    def self.prompt
-      @prompt
     end
 
     def self.save_history file
