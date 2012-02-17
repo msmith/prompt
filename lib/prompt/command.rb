@@ -43,7 +43,7 @@ module Prompt
     private
 
     def regex
-      @regex ||= begin
+      begin
         regex_strs = words.map do |word|
            case word
            when Variable

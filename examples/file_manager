@@ -8,7 +8,7 @@ extend Prompt::DSL
 
 dynamic_variable :dir, "Directory" do
   Dir.entries(@pwd).select do |e|
-    File.directory? e
+    File.directory?(File.join(@pwd, e))
   end
 end
 
@@ -18,7 +18,14 @@ end
 
 command "ls", "List files" do
   puts @pwd
-  puts Dir.entries(@pwd)
+  Dir.entries(@pwd).select do |e|
+    path = File.join(@pwd, e)
+    if File.directory?(path)
+      puts "#{e}/"
+    else
+      puts e
+    end
+  end
 end
 
 command "pwd", "Print current directory" do
