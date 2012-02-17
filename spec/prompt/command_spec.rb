@@ -26,6 +26,15 @@ describe Prompt::Command do
       c = Command.new("hi :name")
 
       c.match("hi guy").should == ["guy"]
+      c.match("hi 'some guy'").should == ["some guy"]
+      c.match("hi ''").should == [""]
+      c.match('hi "some guy"').should == ["some guy"]
+      c.match('hi ""').should == [""]
+
+      c.match("hi '").should == ["'"]
+      c.match('hi "').should == ['"']
+      c.match('hi \'"').should == ['\'"']
+
       c.match("higuy").should be_nil
       c.match("higuy guy").should be_nil
     end

@@ -17,7 +17,7 @@ module Prompt
 
     def match(str)
       if m = regex.match(str.strip)
-        m[1..-1]
+        variables.map {|v| m[v.name.to_s] }
       end
     end
 

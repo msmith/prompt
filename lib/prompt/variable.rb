@@ -13,9 +13,9 @@ module Prompt
 
     def regex
       if values
-        "(#{values.map{|v| Regexp.escape(v)}.join("|")})"
+        "(?<#{name}>#{values.map{|v| Regexp.escape(v)}.join("|")})"
       else
-        "([^\s]+)"
+        "('(?<#{name}>[^\']*)'|\"(?<#{name}>[^\"]*)\"|(?<#{name}>[^\s]+))"
       end
     end
 

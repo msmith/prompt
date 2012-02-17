@@ -7,7 +7,7 @@ module Prompt
     end
 
     def regex
-      "(.+)"
+      "(?<#{name}>.+)"
     end
 
   end
