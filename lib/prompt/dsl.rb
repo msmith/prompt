@@ -1,5 +1,6 @@
 require 'prompt/variable'
 require 'prompt/proc_variable'
+require 'prompt/glob_variable'
 
 module Prompt
   module DSL

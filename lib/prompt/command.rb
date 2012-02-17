@@ -61,6 +61,9 @@ module Prompt
          if word[0] == ":"
            sym = word[1..-1].to_sym
            @all_variables.find {|v| v.name == sym} || Variable.new(sym, sym.to_s)
+         elsif word[0] == "*"
+           sym = word[1..-1].to_sym
+           @all_variables.find {|v| v.name == sym} || GlobVariable.new(sym, sym.to_s)
          else
            word
          end

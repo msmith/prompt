@@ -1,5 +1,6 @@
 require 'prompt/command'
 require 'prompt/variable'
+require 'prompt/glob_variable'
 
 include Prompt
 
@@ -53,6 +54,21 @@ describe Prompt::Command do
       c.match("go s").should == ["s"]
       c.match("go x").should be_nil
       c.match("go nn").should be_nil
+    end
+
+    it "matches correctly with glob variable" do
+      c = Command.new("say *stuff")
+
+      c.match("say hello").should == ["hello"]
+      c.match("say hello world").should == ["hello world"]
+    end
+
+    it "matches correctly with glob variable and other variable" do
+      c = Command.new("say *stuff :adverb")
+
+      c.match("say hello").should be_nil
+      c.match("say hello loudly").should == ["hello", "loudly"]
+      c.match("say hello world loudly").should == ["hello world", "loudly"]
     end
   end
 

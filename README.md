@@ -108,6 +108,15 @@ end
 
 Here, the variables are named `first` and `last`.  Their values are be passed as arguments to the command's block, in the order in which they appear.
 
+
+Each `:variable` only matches a single word.  If you want to match multiple words to one variable, use a `*variable`.
+
+```ruby
+command "say *sentence" do |sentence|
+  puts "You say '#{sentence}'"
+end
+```
+
 ### Defining variables
 
 It's not necessary to define a variable before using it in a command, but doing so will allow you to provide a useful description and valid values for the variable.

@@ -30,7 +30,7 @@ command "look", "Look around" do
   end
 end
 
-command "say :something", "Say something" do |something|
+command "say *something", "Say something" do |something|
   puts "You say '#{something}'"
 end
 
