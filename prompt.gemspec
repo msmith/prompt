@@ -1,6 +1,9 @@
+$: << File.join(File.dirname(__FILE__), "lib")
+require 'prompt'
+
 Gem::Specification.new do |s|
   s.name        = 'prompt'
-  s.version     = '0.0.1'
+  s.version     = Prompt::VERSION
   s.summary     = 'A small framework that makes it easy to build slick command-line applications'
   s.description = 'Prompt makes it easy to build slick command-line applications with Tab Completion, Command History, and Built-in Help'
   s.authors     = ["Mike Smith"]
