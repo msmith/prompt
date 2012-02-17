@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email       = 'mike@sticknet.net'
 
   s.require_paths = ["lib"]
-  s.files         = ["README.md"]
+  s.files         = ["README.md", "CHANGELOG.md", "LICENSE.txt"]
   s.files         += Dir["lib/**/*.rb"]
   s.files         += Dir["spec/**/*.rb"]
   s.files         += Dir["examples/**/*"]
