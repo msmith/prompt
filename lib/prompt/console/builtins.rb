@@ -12,7 +12,7 @@ module Prompt
         print_help
       end
 
-      command "help -v", "List all commands, including variables" do
+      command "help -v", "List all commands, including parameters" do
         print_help true
       end
 
@@ -30,7 +30,7 @@ module Prompt
           cg.commands.each do |cmd|
             puts "  %-40s %s" % [cmd.usage, cmd.desc]
             if verbose
-              cmd.variables.each do |v|
+              cmd.parameters.each do |v|
                 puts " "*43 + ("%-10s %s" % ["<#{v.name}>", "#{v.desc}"])
               end
             end

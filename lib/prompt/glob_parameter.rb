@@ -1,5 +1,5 @@
 module Prompt
-  class GlobVariable < Variable
+  class GlobParameter < Parameter
 
     def initialize(name, desc, &block)
       super(name, desc, nil)

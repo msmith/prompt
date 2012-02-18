@@ -15,8 +15,8 @@ module Prompt
       @current_command_group_name = desc
     end
 
-    def define_command name, desc = nil, variables, &block
-      current_command_group.commands << Command.new(name, desc, variables, &block)
+    def define_command name, desc = nil, parameters, &block
+      current_command_group.commands << Command.new(name, desc, parameters, &block)
     end
 
     def exec command_str

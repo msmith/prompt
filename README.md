@@ -18,7 +18,7 @@ extend Prompt::DSL
 
 desc "Move"
 
-variable :direction, "A cardinal direction", %w(north east south west)
+param :direction, "A cardinal direction", %w(north east south west)
 
 command "go :direction", "Walk in the specified direction" do |direction|
   puts "You walked #{direction} and were eaten by a grue."
@@ -39,7 +39,7 @@ Prompt::Console.start
 
 ### Tab completion
 
-Tab completion is hooked up automatically after you define your commands and variables
+Tab completion is hooked up automatically after you define your commands and parameters
 
     $ my_app
     > g<TAB>
@@ -69,7 +69,7 @@ The `help` command is built-in.  It will print all of the commands that you've d
     Console commands
 
       help                                     List all commands
-      help -v                                  List all commands, including variables
+      help -v                                  List all commands, including parameters
       exit
 
     Move
@@ -96,9 +96,9 @@ desc "Burger commands"
 command ...
 ```
 
-## Using Variables
+## Using Parameters
 
-Variables can be used in a command.
+Parameters can be used in a command:
 
 ```ruby
 command "name :first :last" do |first, last|
@@ -106,10 +106,10 @@ command "name :first :last" do |first, last|
 end
 ```
 
-Here, the variables are named `first` and `last`.  Their values are be passed as arguments to the command's block, in the order in which they appear.
+Here, the parameters are named `first` and `last`.  Their values are be passed as arguments to the command's block, in the order in which they appear.
 
 
-Each `:variable` only matches a single word.  If you want to match multiple words to one variable, use a `*variable`.
+Each `:parameter` only matches a single word.  If you want to match multiple words to one parameter, use a `*parameter`.
 
 ```ruby
 command "say *sentence" do |sentence|
@@ -117,28 +117,28 @@ command "say *sentence" do |sentence|
 end
 ```
 
-### Defining variables
+### Defining parameters
 
-It's not necessary to define a variable before using it in a command, but doing so will allow you to provide a useful description and valid values for the variable.
+It's not necessary to define a parameter before using it in a command, but doing so will allow you to provide a useful description and valid values for the parameter.
 
 ```ruby
-variable :name, "Description"
+param :name, "Description"
 ```
 
 ### Specifying a static list of valid values
 
-You can specify a static list of valid values for a variable.  These will be expanded when using tab completion.
+You can specify a static list of valid values for a parameter.  These will be expanded when using tab completion.
 
 ```ruby
-variable :name, "Description", %w(value1 value2)
+param :name, "Description", %w(value1 value2)
 ```
 
 ### Specifying a dynamic list of valid values
 
-Instead of a static list, you can specify a block that will dynamically return a list of valid values for a variable.  These will also be expanded when using tab completion.
+Instead of a static list, you can specify a block that will dynamically return a list of valid values for a parameter.  These will also be expanded when using tab completion.
 
 ```ruby
-variable :file, "JPG file" do
+param :file, "JPG file" do
   Dir.glob "*.jpg"
 end
 ```

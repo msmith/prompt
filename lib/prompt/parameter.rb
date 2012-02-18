@@ -1,5 +1,5 @@
 module Prompt
-  class Variable
+  class Parameter
 
     attr :name
     attr :desc

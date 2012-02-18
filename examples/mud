@@ -9,7 +9,7 @@ GRUE = 3
 
 desc "Move"
 
-variable :direction, "A cardinal direction", %w(north east south west)
+param :direction, "A cardinal direction", %w(north east south west)
 
 command "go :direction", "Walk in the specified direction" do |direction|
   puts "You walked #{direction}"

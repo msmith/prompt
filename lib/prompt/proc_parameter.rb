@@ -1,5 +1,5 @@
 module Prompt
-  class ProcVariable < Variable
+  class ProcParameter < Parameter
 
     def initialize(name, desc, &block)
       super(name, desc, nil)

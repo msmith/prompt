@@ -4,10 +4,10 @@ module Prompt
     attr :name
     attr :desc
 
-    def initialize(name, desc = nil, all_variables = [], &block)
+    def initialize(name, desc = nil, all_parameters = [], &block)
       @name = name
       @desc = desc
-      @all_variables = all_variables
+      @all_parameters = all_parameters
       @action = block
     end
 
@@ -17,12 +17,12 @@ module Prompt
 
     def match(str)
       if m = regex.match(str.strip)
-        variables.map {|v| m[v.name.to_s] }
+        parameters.map {|v| m[v.name.to_s] }
       end
     end
 
-    def variables
-      @variables ||= words.select {|w| w.kind_of? Variable}
+    def parameters
+      @parameters ||= words.select {|w| w.kind_of? Parameter}
     end
 
     def expansions
@@ -32,7 +32,7 @@ module Prompt
     def usage
       words.map do |word|
         case word
-        when Variable
+        when Parameter
           "<#{word.name}>"
         else
           word
@@ -46,7 +46,7 @@ module Prompt
       begin
         regex_strs = words.map do |word|
            case word
-           when Variable
+           when Parameter
              word.regex
            else
              Regexp.escape(word)
@@ -60,10 +60,10 @@ module Prompt
       @words ||= @name.split(/\s/).map do |word|
          if word[0] == ":"
            sym = word[1..-1].to_sym
-           @all_variables.find {|v| v.name == sym} || Variable.new(sym, sym.to_s)
+           @all_parameters.find {|v| v.name == sym} || Parameter.new(sym, sym.to_s)
          elsif word[0] == "*"
            sym = word[1..-1].to_sym
-           @all_variables.find {|v| v.name == sym} || GlobVariable.new(sym, sym.to_s)
+           @all_parameters.find {|v| v.name == sym} || GlobParameter.new(sym, sym.to_s)
          else
            word
          end
@@ -77,7 +77,7 @@ module Prompt
       tail = a[1..-1]
 
       case head
-      when Variable
+      when Parameter
         head = head.expansions
       else
         head = [head]
