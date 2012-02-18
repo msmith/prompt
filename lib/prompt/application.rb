@@ -27,9 +27,7 @@ module Prompt
       raise CommandNotFound.new(command_str)
     end
 
-    def completions starting_with = nil
-      return all_expansions unless starting_with
-
+    def completions starting_with
       all_expansions.grep /^#{Regexp.escape(starting_with)}/
     end
 
