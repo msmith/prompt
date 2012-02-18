@@ -68,8 +68,8 @@ The `help` command is built-in.  It will print all of the commands that you've d
     > help
     Console commands
 
-      help -v
-      help
+      help                                     List all commands
+      help -v                                  List all commands, including variables
       exit
 
     Move

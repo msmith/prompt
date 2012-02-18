@@ -8,12 +8,12 @@ module Prompt
 
       desc "Console commands"
 
-      command "help -v" do
-        print_help true
+      command "help", "List all commands" do
+        print_help
       end
 
-      command "help" do
-        print_help
+      command "help -v", "List all commands, including variables" do
+        print_help true
       end
 
       command "exit" do
