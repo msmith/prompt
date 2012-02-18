@@ -22,16 +22,14 @@ module Prompt
       Prompt.application.define_command(name, desc, @variables || {}, &block)
     end
 
-    def variable(name, desc, values = nil)
+    def variable(name, desc, values = nil, &block)
       @variables = [] unless defined? @variables
       raise "variable :#{name} is already defined" if @variables.find {|v| v.name == name}
-      @variables << Variable.new(name, desc, values)
-    end
-
-    def dynamic_variable(name, desc, &block)
-      @variables = [] unless defined? @variables
-      raise "variable :#{name} is already defined" if @variables.find {|v| v.name == name}
-      @variables << ProcVariable.new(name, desc, &block)
+      if block
+        @variables << ProcVariable.new(name, desc, &block)
+      else
+        @variables << Variable.new(name, desc, values)
+      end
     end
 
   end

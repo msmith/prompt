@@ -135,10 +135,10 @@ variable :name, "Description", %w(value1 value2)
 
 ### Specifying a dynamic list of valid values
 
-Instead of specifying a static list, you can specify a block that will dynamically return a list of valid values for a variable.  These will be expanded when using tab completion.  
+Instead of a static list, you can specify a block that will dynamically return a list of valid values for a variable.  These will also be expanded when using tab completion.
 
 ```ruby
-dynamic_variable :file, "JPG file" do
+variable :file, "JPG file" do
   Dir.glob "*.jpg"
 end
 ```

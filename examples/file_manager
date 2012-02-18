@@ -11,7 +11,7 @@ end
 @pwd = File.absolute_path Dir.pwd
 change_prompt @pwd
 
-dynamic_variable :dir, "Directory" do
+variable :dir, "Directory" do
   Dir.entries(@pwd).select do |e|
     File.directory?(File.join(@pwd, e))
   end
