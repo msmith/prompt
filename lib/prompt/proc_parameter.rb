@@ -7,7 +7,11 @@ module Prompt
     end
 
     def values
-      @proc.call
+      @cached_value ||= @proc.call
+    end
+
+    def clear_cached_value
+      @cached_value = nil
     end
 
   end

@@ -40,6 +40,12 @@ module Prompt
       end.join(" ")
     end
 
+    def clear_cached_values
+      @all_parameters.each do |p|
+        p.clear_cached_value if p.respond_to?(:clear_cached_value)
+      end
+    end
+
     private
 
     def regex

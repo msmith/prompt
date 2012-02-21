@@ -25,6 +25,8 @@ module Prompt
         return command.run(args) if args
       end
       raise CommandNotFound.new(command_str)
+    ensure
+      clear_cached_values
     end
 
     def completions starting_with
@@ -32,6 +34,12 @@ module Prompt
     end
 
     private
+
+    def clear_cached_values
+      commands.each do |c|
+        c.clear_cached_values
+      end
+    end
 
     def commands
       @command_groups.map(&:commands).reduce [] { |a, b| a + b }
