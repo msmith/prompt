@@ -68,20 +68,21 @@ describe Prompt::Command do
     it "matches correctly with glob parameter" do
       c = Command.new("say *stuff")
 
-      c.match("say hello").should == ["hello"]
-      c.match("say hello world").should == ["hello world"]
-      c.match("say hello  world").should == ["hello  world"]
-      c.match("say  hello  world").should == ["hello  world"]
+      c.match("say hello").should == [["hello"]]
+      c.match("say hello world").should == [["hello", "world"]]
+      c.match("say hello  world").should == [["hello", "world"]]
+      c.match("say  hello  world").should == [["hello", "world"]]
+      c.match("say 'hello world'").should == [["hello world"]]
+      c.match('say "hello world"').should == [["hello world"]]
     end
 
     it "matches correctly with glob parameter and other parameter" do
       c = Command.new("say *stuff :adverb")
 
       c.match("say hello").should be_nil
-      c.match("say hello loudly").should == ["hello", "loudly"]
-      c.match("say hello world loudly").should == ["hello world", "loudly"]
-      # TODO - make this work
-      #c.match("say hello 'world loudly'").should == ["hello", "world loudly"]
+      c.match("say hello loudly").should == [["hello"], "loudly"]
+      c.match("say hello world loudly").should == [["hello", "world"], "loudly"]
+      c.match("say hello 'world loudly'").should == [["hello"], "world loudly"]
     end
   end
 

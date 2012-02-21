@@ -113,7 +113,7 @@ Each `:parameter` only matches a single word.  If you want to match multiple wor
 
 ```ruby
 command "say *sentence" do |sentence|
-  puts "You say '#{sentence}'"
+  puts "You said #{sentence.length} words"
 end
 ```
 

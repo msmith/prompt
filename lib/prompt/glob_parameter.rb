@@ -7,7 +7,11 @@ module Prompt
     end
 
     def regex
-      "(?<#{name}>.+)"
+      "(?<#{name}>(([^#{Prompt::Command::SEP}]*)#{Prompt::Command::SEP}?)+)"
+    end
+
+    def matches s
+      s.split(Prompt::Command::SEP)
     end
 
   end

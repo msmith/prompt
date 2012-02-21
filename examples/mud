@@ -31,7 +31,7 @@ command "look", "Look around" do
 end
 
 command "say *something", "Say something" do |something|
-  puts "You say '#{something}'"
+  puts "You say '#{something.join(" ")}'"
 end
 
 Prompt::Console.start

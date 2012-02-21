@@ -15,12 +15,16 @@ module Prompt
       if values
         "(?<#{name}>#{values.map{|v| Regexp.escape(v)}.join("|")})"
       else
-        "('(?<#{name}>[^\']*)'|\"(?<#{name}>[^\"]*)\"|(?<#{name}>[^\s]+))"
+        "(?<#{name}>([^#{Prompt::Command::SEP}]*))"
       end
     end
 
     def expansions
       values || ["<#{name}>"]
+    end
+
+    def matches s
+      s
     end
 
   end
