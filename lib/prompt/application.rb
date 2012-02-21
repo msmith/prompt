@@ -42,11 +42,11 @@ module Prompt
     end
 
     def commands
-      @command_groups.map(&:commands).reduce [] { |a, b| a + b }
+      @command_groups.map(&:commands).flatten(1)
     end
 
     def all_expansions
-      commands.map(&:expansions).flatten
+      commands.map(&:expansions).flatten(1)
     end
 
     def current_command_group
