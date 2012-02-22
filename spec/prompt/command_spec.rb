@@ -10,81 +10,112 @@ describe Prompt::Command do
   SPEEDS = %w{quickly slowly}
 
   describe "#match" do
-    it "matches correctly" do
-      c = Command.new("hi")
 
-      c.match("hi").should == []
-      c.match("hi ").should == []
-      c.match(" hi").should == []
+    describe "hi" do
 
-      c.match("bye").should be_nil
-      c.match("h").should be_nil
-      c.match("").should be_nil
+      it "matches correctly" do
+        c = Command.new("hi")
+
+        c.match("hi").should == []
+        c.match("hi ").should == []
+        c.match(" hi").should == []
+
+        c.match("bye").should be_nil
+        c.match("h").should be_nil
+        c.match("").should be_nil
+      end
+
     end
 
-    it "matches correctly with a parameter" do
-      c = Command.new("hi :name")
+    describe "hi :name" do
 
-      c.match("hi guy").should == ["guy"]
-      c.match("hi 'some guy'").should == ["some guy"]
-      c.match("hi ''").should == [""]
-      c.match('hi "some guy"').should == ["some guy"]
-      c.match('hi ""').should == [""]
+      it "matches correctly" do
+        c = Command.new("hi :name")
 
-      c.match("hi '").should == ["'"]
-      c.match('hi "').should == ['"']
-      c.match('hi \'"').should == ['\'"']
+        c.match("hi guy").should == ["guy"]
+        c.match("hi 'some guy'").should == ["some guy"]
+        c.match("hi ''").should == [""]
+        c.match('hi "some guy"').should == ["some guy"]
+        c.match('hi ""').should == [""]
 
-      c.match("higuy").should be_nil
-      c.match("higuy guy").should be_nil
+        c.match("hi '").should == ["'"]
+        c.match('hi "').should == ['"']
+        c.match('hi \'"').should == ['\'"']
+
+        c.match("higuy").should be_nil
+        c.match("higuy guy").should be_nil
+
+        c.match(" hi guy").should == ["guy"]
+        c.match("hi  guy").should == ["guy"]
+        c.match("hi guy ").should == ["guy"]
+      end
+
+      it "matches correctly (with parameter value constraint)" do
+        v = [Parameter.new(:name, "", %w{alice bob})]
+        c = Command.new("hi :name", nil, v)
+
+        c.match("hi alice").should == ["alice"]
+        c.match("hi bob").should == ["bob"]
+        c.match("hi zack").should be_nil
+        c.match("hi ali").should be_nil
+      end
+
     end
 
-    it "matches correctly with a parameter and multiple spaces" do
-      c = Command.new("hi :name")
+    describe "hi :first :last" do
 
-      c.match(" hi guy").should == ["guy"]
-      c.match("hi  guy").should == ["guy"]
-      c.match("hi guy ").should == ["guy"]
+      it "matches correctly" do
+        c = Command.new("hi :first :last")
+
+        c.match("hi agent smith").should == ["agent", "smith"]
+        c.match("hi agent").should be_nil
+        c.match("hi agent smith guy").should be_nil
+      end
+
     end
 
-    it "matches correctly with 2 parameters" do
-      c = Command.new("hi :first :last")
+    describe "say *stuff" do
 
-      c.match("hi agent smith").should == ["agent", "smith"]
-      c.match("hi agent").should be_nil
-      c.match("hi agent smith guy").should be_nil
+      it "matches correctly" do
+        c = Command.new("say *stuff")
+
+        c.match("say hello").should == [["hello"]]
+        c.match("say hello world").should == [["hello", "world"]]
+        c.match("say hello  world").should == [["hello", "world"]]
+        c.match("say  hello  world").should == [["hello", "world"]]
+        c.match("say 'hello world'").should == [["hello world"]]
+        c.match('say "hello world"').should == [["hello world"]]
+      end
+
     end
 
-    it "matches correctly with parameter value constraint" do
-      v = [Parameter.new(:dir, "", DIRECTIONS)]
-      c = Command.new("go :dir", nil, v)
+    describe "say *stuff :adverb" do
 
-      c.match("go n").should == ["n"]
-      c.match("go s").should == ["s"]
-      c.match("go x").should be_nil
-      c.match("go nn").should be_nil
+      it "matches correctly" do
+        c = Command.new("say *stuff :adverb")
+
+        c.match("say hello").should be_nil
+        c.match("say hello loudly").should == [["hello"], "loudly"]
+        c.match("say hello world loudly").should == [["hello", "world"], "loudly"]
+        c.match("say hello 'world loudly'").should == [["hello"], "world loudly"]
+      end
+
     end
 
-    it "matches correctly with glob parameter" do
-      c = Command.new("say *stuff")
+    describe "say *first *second" do
 
-      c.match("say hello").should == [["hello"]]
-      c.match("say hello world").should == [["hello", "world"]]
-      c.match("say hello  world").should == [["hello", "world"]]
-      c.match("say  hello  world").should == [["hello", "world"]]
-      c.match("say 'hello world'").should == [["hello world"]]
-      c.match('say "hello world"').should == [["hello world"]]
+      it "matches correctly" do
+        c = Command.new("say *first *second")
+
+        c.match("say one").should be_nil
+        c.match("say one two").should == [["one"], ["two"]]
+        c.match("say one two three").should == [["one", "two"], ["three"]]
+        c.match("say one 'two three'").should == [["one"], ["two three"]]
+      end
+
     end
 
-    it "matches correctly with glob parameter and other parameter" do
-      c = Command.new("say *stuff :adverb")
-
-      c.match("say hello").should be_nil
-      c.match("say hello loudly").should == [["hello"], "loudly"]
-      c.match("say hello world loudly").should == [["hello", "world"], "loudly"]
-      c.match("say hello 'world loudly'").should == [["hello"], "world loudly"]
-    end
-  end
+  end # describe "#match"
 
   describe "#parameters" do
     it "returns correctly" do
