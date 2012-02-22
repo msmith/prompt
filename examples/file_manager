@@ -38,4 +38,11 @@ command "pwd", "Print current directory" do
   puts @pwd
 end
 
+param :files, "A list of files"
+
+command "cp *files :dir", "Copy one or more files to dest" do |files, dir|
+  puts "Copying #{files.length} file(s) to #{dir}"
+  # doesn't actually do it...
+end
+
 Prompt::Console.start
