@@ -5,7 +5,7 @@ module Prompt
     attr :desc
     attr :values
 
-    def initialize(name, desc, values = nil)
+    def initialize(name, desc = nil, values = nil)
       @name = name
       @desc = desc
       @values = values

@@ -1,4 +1,5 @@
 require 'strscan'
+require 'prompt/parameter'
 
 module Prompt
   class Command
@@ -10,12 +11,15 @@ module Prompt
 
     attr :name
     attr :desc
+    attr :parameters
 
-    def initialize(name, desc = nil, all_parameters = [], &block)
-      @name = name
+    def initialize(words, desc = nil, &block)
+      @words = words
       @desc = desc
-      @all_parameters = all_parameters
       @action = block
+
+      @name = words.join(" ")
+      @parameters = words.select {|w| w.kind_of? Parameter}
     end
 
     def run args
@@ -24,20 +28,16 @@ module Prompt
 
     def match str
       if m = regex.match(to_args(str).join(SEP))
-        parameters.map {|v| v.matches(m[v.name]) }
+        @parameters.map {|v| v.matches(m[v.name]) }
       end
     end
 
-    def parameters
-      @parameters ||= words.select {|w| w.kind_of? Parameter}
-    end
-
     def expansions
-      expand words
+      expand @words
     end
 
     def usage
-      words.map do |word|
+      @words.map do |word|
         case word
         when Parameter
           "<#{word.name}>"
@@ -48,7 +48,7 @@ module Prompt
     end
 
     def clear_cached_values
-      @all_parameters.each do |p|
+      @parameters.each do |p|
         p.clear_cached_value if p.respond_to?(:clear_cached_value)
       end
     end
@@ -74,7 +74,7 @@ module Prompt
 
     def regex
       begin
-        regex_strs = words.map do |word|
+        regex_strs = @words.map do |word|
            case word
            when Parameter
              word.regex
@@ -83,22 +83,6 @@ module Prompt
            end
         end
         Regexp.new("^#{regex_strs.join(SEP)}$")
-      end
-    end
-
-    # Splits the command name into an array of Strings & Parameters
-    # e.g. ["cp", GlobParameter(:files), Parameter(:dest)]
-    def words
-      @words ||= @name.split(/\s/).map do |word|
-         if word[0] == ":"
-           sym = word[1..-1].to_sym
-           @all_parameters.find {|v| v.name == sym} || Parameter.new(sym, sym.to_s)
-         elsif word[0] == "*"
-           sym = word[1..-1].to_sym
-           @all_parameters.find {|v| v.name == sym} || GlobParameter.new(sym, sym.to_s)
-         else
-           word
-         end
       end
     end
 

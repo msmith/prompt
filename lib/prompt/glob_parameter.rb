@@ -1,7 +1,7 @@
 module Prompt
   class GlobParameter < Parameter
 
-    def initialize(name, desc, &block)
+    def initialize(name, desc = nil, &block)
       super(name, desc, nil)
       @proc = block
     end

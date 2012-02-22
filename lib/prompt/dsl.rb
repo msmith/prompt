@@ -1,6 +1,7 @@
 require 'prompt/parameter'
 require 'prompt/proc_parameter'
 require 'prompt/glob_parameter'
+require 'prompt/dsl_helper'
 
 module Prompt
   module DSL
@@ -19,7 +20,9 @@ module Prompt
     end
 
     def command(name, desc = nil, &block)
-      Prompt.application.define_command(name, desc, @parameters || {}, &block)
+      words = DSLHelper.words(name, @parameters || [])
+      command = Command.new(words, desc, &block)
+      Prompt.application.add_command(command)
     end
 
     def param(name, desc, values = nil, &block)
