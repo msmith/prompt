@@ -20,7 +20,13 @@ module Prompt
     end
 
     def expansions
-      values || ["<#{name}>"]
+      if values
+        values.map do |v|
+          (v =~ /\s/) ?  "\"#{v}\"" : v
+        end
+      else
+        ["<#{name}>"]
+      end
     end
 
     def matches s

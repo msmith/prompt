@@ -51,10 +51,12 @@ describe Prompt::Command do
       end
 
       it "matches correctly (with parameter value constraint)" do
-        c = Command.new ["hi", Parameter.new(:name, "", %w{alice bob})]
+        c = Command.new ["hi", Parameter.new(:name, "", ["alice", "bob", "charlie rose"])]
 
         c.match("hi alice").should == ["alice"]
         c.match("hi bob").should == ["bob"]
+        c.match("hi 'charlie rose'").should == ["charlie rose"]
+        c.match("hi charlie rose").should be_nil
         c.match("hi zack").should be_nil
         c.match("hi ali").should be_nil
       end
@@ -145,6 +147,11 @@ describe Prompt::Command do
          "go e quickly", "go e slowly",
          "go s quickly", "go s slowly",
          "go w quickly", "go w slowly"]
+    end
+
+    it"expands correctly if parameter values have spaces" do
+      speed = Parameter.new(:speed, "", ["fast", "very fast"])
+      Command.new(["go", speed]).expansions.should == ['go fast', 'go "very fast"']
     end
   end
 
