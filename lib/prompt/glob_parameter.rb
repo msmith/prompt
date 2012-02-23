@@ -1,9 +1,8 @@
 module Prompt
   class GlobParameter < Parameter
 
-    def initialize(name, desc = nil, &block)
-      super(name, desc, nil)
-      @proc = block
+    def initialize(name, desc = nil)
+      super(name, desc)
     end
 
     def regex
