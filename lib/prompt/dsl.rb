@@ -12,11 +12,11 @@ module Prompt
       else
         "Commands"
       end
-      Prompt.application.use_command_group(name)
+      Prompt.application.select_group(name)
     end
 
-    def desc desc
-      Prompt.application.use_command_group(desc)
+    def group desc
+      Prompt.application.select_group(desc)
     end
 
     def command(name, desc = nil, &block)

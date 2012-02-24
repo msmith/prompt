@@ -2,6 +2,10 @@
 
 This is updated when a new version is pushed to http://rubygems.org
 
+## HEAD
+
+* DSL change: `desc` was renamed to `group`
+
 ## 0.0.3 (Feb 22, 2011)
 
 * DSL change: `variable` & `dynamic_variable` were renamed to `param`

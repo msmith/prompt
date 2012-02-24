@@ -16,7 +16,7 @@ Commands are defined with a Sinatra-inspired DSL:
 require 'prompt'
 extend Prompt::DSL
 
-desc "Move"
+group "Move"
 
 param :direction, "A cardinal direction", %w(north east south west)
 
@@ -24,7 +24,7 @@ command "go :direction", "Walk in the specified direction" do |direction|
   puts "You walked #{direction} and were eaten by a grue."
 end
 
-desc "Interact"
+group "Interact"
 
 command "look", "Look around" do
   puts "You're in a dark room."
@@ -86,12 +86,12 @@ The `help` command is built-in.  It will print all of the commands that you've d
 You can put commands in logical groups.  This only affects how help is printed.
 
 ```ruby
-desc "Taco commands"
+group "Taco commands"
 
 command ...
 command ...
 
-desc "Burger commands"
+group "Burger commands"
 
 command ...
 ```

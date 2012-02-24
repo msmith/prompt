@@ -11,7 +11,7 @@ module Prompt
       @prompt = "> "
     end
 
-    def use_command_group desc
+    def select_group desc
       @current_command_group_name = desc
     end
 

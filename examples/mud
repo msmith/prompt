@@ -7,7 +7,7 @@ extend Prompt::DSL
 GRUE = 3
 @moves = 0
 
-desc "Move"
+group "Move"
 
 param :direction, "A cardinal direction", %w(north east south west)
 
@@ -20,7 +20,7 @@ command "go :direction", "Walk in the specified direction" do |direction|
   end
 end
 
-desc "Interact"
+group "Interact"
 
 command "look", "Look around" do
   if @moves < GRUE

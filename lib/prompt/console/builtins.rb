@@ -6,7 +6,7 @@ module Prompt
     class Builtins
       extend DSL
 
-      desc "Console commands"
+      group "Console commands"
 
       command "help", "List all commands" do
         print_help
