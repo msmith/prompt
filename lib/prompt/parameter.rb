@@ -19,13 +19,13 @@ module Prompt
       end
     end
 
-    def expansions
+    def expansions(starting_with = "")
       if values
-        values.map do |v|
+        values.select{ |v| v.start_with? starting_with }.map do |v|
           (v =~ /\s/) ?  "\"#{v}\"" : v
         end
       else
-        ["<#{name}>"]
+        []
       end
     end
 

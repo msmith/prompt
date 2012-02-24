@@ -24,16 +24,28 @@ module Prompt
         args = command.match(words)
         return command.run(args) if args
       end
-      raise CommandNotFound.new(command_str)
+      raise CommandNotFound.new
     ensure
       clear_cached_values
     end
 
-    def completions starting_with
-      all_expansions.grep /^#{Regexp.escape(starting_with)}/
+    def completions line_starting_with, word_starting_with
+      args = Console.split(line_starting_with)
+      arg_idx = word_index(line_starting_with)
+      all_expansions(args[0,arg_idx], word_starting_with)
     end
 
     private
+
+    def word_index line
+      ss = StringScanner.new(line)
+      ss.scan(/\s+/)
+      idx = 0
+      while ss.scan(/[^\s]+\s+/)
+        idx += 1
+      end
+      idx
+    end
 
     def clear_cached_values
       commands.each do |c|
@@ -45,8 +57,10 @@ module Prompt
       @command_groups.map(&:commands).flatten(1)
     end
 
-    def all_expansions
-      commands.map(&:expansions).flatten(1)
+    def all_expansions(args, partial_arg)
+      commands.select { |c| c.start_with? args }.map do |c|
+        c.expansions(args.length, partial_arg)
+      end.flatten(1)
     end
 
     def current_command_group

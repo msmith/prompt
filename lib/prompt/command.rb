@@ -30,10 +30,6 @@ module Prompt
       end
     end
 
-    def expansions
-      expand @words
-    end
-
     def usage
       @words.map do |word|
         case word
@@ -51,6 +47,27 @@ module Prompt
       end
     end
 
+    def expansions(word_idx, starting_with)
+      # TODO - combine glob parameters with any that follow
+      word = @words[0..word_idx].find { |w| w.kind_of? GlobParameter }
+      word = word || @words[word_idx]
+
+      return [] if word.nil?
+
+      case word
+      when Parameter
+        word.expansions(starting_with)
+      when String
+        word.start_with?(starting_with) ? [word] : []
+      end
+    end
+
+    def start_with?(args)
+      args.zip(@words).all? do |a, w|
+        w == a or w.kind_of?(Parameter)
+      end
+    end
+
     private
 
     def regex
@@ -65,30 +82,6 @@ module Prompt
         end
         Regexp.new("^#{regex_strs.join(SEP)}$")
       end
-    end
-
-    def expand a
-      return [] if a.empty?
-
-      head = a[0]
-      tail = a[1..-1]
-
-      case head
-      when Parameter
-        head = head.expansions
-      else
-        head = [head]
-      end
-
-      return head if tail.empty?
-
-      result = []
-      head.each do |h|
-        expand(tail).each do |e|
-          result << "#{h} #{e}"
-        end
-      end
-      result
     end
 
   end

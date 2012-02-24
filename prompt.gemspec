@@ -16,5 +16,5 @@ Gem::Specification.new do |s|
   s.files         += Dir["examples/**/*"]
   s.homepage      = 'http://github.com/mudynamics/prompt'
 
-  s.required_rubygems_version = Gem::Requirement.new('>= 1.3.6')
+  s.required_ruby_version = '>= 1.9.2' # because Readline.line_buffer is required
 end

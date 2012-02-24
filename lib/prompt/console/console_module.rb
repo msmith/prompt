@@ -7,8 +7,9 @@ module Prompt
 
     HISTORY_MAX_SIZE = 100
 
-    CompletionProc = proc do |s|
-      Prompt.application.completions(s)
+    CompletionProc = proc do |word_starting_with|
+      line_starting_with = Readline.line_buffer[0...Readline.point]
+      Prompt.application.completions(line_starting_with, word_starting_with)
     end
 
     def self.start(history_file = nil)
@@ -20,8 +21,6 @@ module Prompt
         save_history history_file if history_file
       end
 
-      Readline.basic_word_break_characters = ""
-      Readline.completion_append_character = " "
       Readline.completion_proc = CompletionProc
 
       load_history history_file if history_file
@@ -30,8 +29,8 @@ module Prompt
         begin
           words = split(line)
           Prompt.application.exec words
-        rescue ::Prompt::CommandNotFound => e
-          STDERR.puts e.message
+        rescue CommandNotFound
+          STDERR.puts "Command not found: #{line}"
         end
       end
     end

@@ -5,7 +5,7 @@ include Prompt
 describe Prompt::Command do
 
   DIRECTIONS = %w{n e s w}
-  SPEEDS = %w{quickly slowly}
+  SPEEDS = %w{slow slower}
 
   describe "#match" do
 
@@ -116,28 +116,49 @@ describe Prompt::Command do
   end
 
   describe "#expansions" do
+
     it "expands correctly with no parameters" do
-      Command.new(["one"]).expansions.should == ["one"]
+      c = Command.new ["one"]
+      c.expansions(0, "").should == ["one"]
+      c.expansions(0, "on").should == ["one"]
+      c.expansions(0, "z").should == []
+      c.expansions(1, "").should == []
+
+      c = Command.new ["help", "-v"]
+      c.expansions(0, "").should == ["help"]
+      c.expansions(0, "he").should == ["help"]
+      c.expansions(0, "z").should == []
+      c.expansions(1, "").should == ["-v"]
+      c.expansions(1, "-v").should == ["-v"]
+      c.expansions(1, "z").should == []
     end
 
     it "expands correctly with undefined parameters" do
-      Command.new(["go", Parameter.new(:dir)]).expansions.should == ["go <dir>"]
+      c = Command.new(["go", Parameter.new(:dir)])
+      c.expansions(0, "").should == ["go"]
+      c.expansions(0, "g").should == ["go"]
+      c.expansions(0, "go").should == ["go"]
+      c.expansions(1, "").should == []
     end
 
     it "expands correctly with defined parameters" do
       dir = Parameter.new(:dir, "", DIRECTIONS)
+      c = Command.new(["go", dir])
+      c.expansions(1, "").should == DIRECTIONS
+
       speed = Parameter.new(:speed, "", SPEEDS)
-      Command.new(["go", dir]).expansions.should == ["go n", "go e", "go s", "go w"]
-      Command.new(["go", dir, speed]).expansions.should ==
-        ["go n quickly", "go n slowly",
-         "go e quickly", "go e slowly",
-         "go s quickly", "go s slowly",
-         "go w quickly", "go w slowly"]
+      c = Command.new(["go", dir, speed])
+      c.expansions(2, "").should == SPEEDS
+      c.expansions(2, "slow").should == SPEEDS
+      c.expansions(2, "slowe").should == ["slower"]
     end
 
-    it"expands correctly if parameter values have spaces" do
+    it "expands correctly if parameter values have spaces" do
       speed = Parameter.new(:speed, "", ["fast", "very fast"])
-      Command.new(["go", speed]).expansions.should == ['go fast', 'go "very fast"']
+      c = Command.new(["go", speed])
+      c.expansions(1, "").should == ['fast', '"very fast"']
+      c.expansions(1, "f").should == ['fast']
+      c.expansions(1, "v").should == ['"very fast"']
     end
   end
 
