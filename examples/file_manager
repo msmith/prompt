@@ -8,7 +8,7 @@ def change_prompt dir
   Prompt.application.prompt = "#{@pwd}> "
 end
 
-@pwd = File.absolute_path Dir.pwd
+@pwd = File.expand_path Dir.pwd
 change_prompt @pwd
 
 param :dir, "Directory" do
@@ -18,7 +18,7 @@ param :dir, "Directory" do
 end
 
 command "cd :dir", "Change directory" do |dir|
-  @pwd = File.absolute_path File.join(@pwd, dir)
+  @pwd = File.expand_path File.join(@pwd, dir)
   change_prompt @pwd
 end
 
