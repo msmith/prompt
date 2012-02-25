@@ -38,9 +38,9 @@ command "pwd", "Print current directory" do
   puts @pwd
 end
 
-param :files, "A list of files"
+param :file, "File"
 
-command "cp *files :dir", "Copy one or more files to dest" do |files, dir|
+command "cp *file :dir", "Copy one or more files to dest" do |files, dir|
   puts "Copying #{files.length} file(s) to #{dir}"
   # doesn't actually do it...
 end

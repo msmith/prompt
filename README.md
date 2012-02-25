@@ -112,8 +112,8 @@ Here, the parameters are named `first` and `last`.  Their values are be passed a
 Each `:parameter` only matches a single word.  If you want to match multiple words to one parameter, use a `*parameter`.
 
 ```ruby
-command "say *sentence" do |sentence|
-  puts "You said #{sentence.length} words"
+command "say *word" do |words|
+  puts "You said #{words.length} words"
 end
 ```
 
