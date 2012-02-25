@@ -69,9 +69,7 @@ describe Prompt::Command do
 
         c.match(["say", "hello"]).should == [["hello"]]
         c.match(["say", "hello", "world"]).should == [["hello", "world"]]
-      end
-
-      pending do
+        c.match(["say", ""]).should == [[""]]
         c.match(["say", "hello", ""]).should == [["hello", ""]]
       end
 
