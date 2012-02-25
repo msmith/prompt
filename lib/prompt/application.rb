@@ -19,9 +19,9 @@ module Prompt
       current_command_group.commands << command
     end
 
-    def exec command_str
+    def exec words
       commands.each do |command|
-        args = command.match(command_str)
+        args = command.match(words)
         return command.run(args) if args
       end
       raise CommandNotFound.new(command_str)

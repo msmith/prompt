@@ -1,13 +1,11 @@
 require 'strscan'
 require 'prompt/parameter'
+require 'prompt/console/console_module'
 
 module Prompt
   class Command
 
     SEP = "\036" # RS - record separator
-    S_QUOTED_ARG = /'([^']*)'/
-    D_QUOTED_ARG = /"([^"]*)"/
-    UNQUOTED_ARG = /[^\s]+/
 
     attr :name
     attr :desc
@@ -26,8 +24,8 @@ module Prompt
       @action.call *args
     end
 
-    def match str
-      if m = regex.match(to_args(str).join(SEP))
+    def match words
+      if m = regex.match(words.join(SEP))
         @parameters.map {|v| v.matches(m[v.name]) }
       end
     end
@@ -54,23 +52,6 @@ module Prompt
     end
 
     private
-
-    # Splits a command string into an argument list.
-    # This understands how to make "quoted strings" into a single arg
-    def to_args command
-      args = []
-      ss = StringScanner.new(command)
-      ss.scan(/\s+/)
-      until ss.eos?
-        if ss.scan(S_QUOTED_ARG) or ss.scan(D_QUOTED_ARG)
-          args << ss[1]
-        elsif arg = ss.scan(UNQUOTED_ARG)
-          args << arg
-        end
-        ss.scan(/\s+/)
-      end
-      args
-    end
 
     def regex
       begin

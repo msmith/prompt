@@ -1,6 +1,4 @@
-require 'prompt/command'
-require 'prompt/parameter'
-require 'prompt/glob_parameter'
+require 'prompt'
 
 include Prompt
 
@@ -16,13 +14,11 @@ describe Prompt::Command do
       it "matches correctly" do
         c = Command.new ["hi"]
 
-        c.match("hi").should == []
-        c.match("hi ").should == []
-        c.match(" hi").should == []
+        c.match(["hi"]).should == []
 
-        c.match("bye").should be_nil
-        c.match("h").should be_nil
-        c.match("").should be_nil
+        c.match(["bye"]).should be_nil
+        c.match(["h"]).should be_nil
+        c.match([""]).should be_nil
       end
 
     end
@@ -32,33 +28,23 @@ describe Prompt::Command do
       it "matches correctly" do
         c = Command.new ["hi", Parameter.new(:name)]
 
-        c.match("hi guy").should == ["guy"]
-        c.match("hi 'some guy'").should == ["some guy"]
-        c.match("hi ''").should == [""]
-        c.match('hi "some guy"').should == ["some guy"]
-        c.match('hi ""').should == [""]
+        c.match(["hi", "guy"]).should == ["guy"]
+        c.match(["hi", "some guy"]).should == ["some guy"]
+        c.match(["hi", ""]).should == [""]
 
-        c.match("hi '").should == ["'"]
-        c.match('hi "').should == ['"']
-        c.match('hi \'"').should == ['\'"']
-
-        c.match("higuy").should be_nil
-        c.match("higuy guy").should be_nil
-
-        c.match(" hi guy").should == ["guy"]
-        c.match("hi  guy").should == ["guy"]
-        c.match("hi guy ").should == ["guy"]
+        c.match(["higuy"]).should be_nil
+        c.match(["higuy", "guy"]).should be_nil
       end
 
       it "matches correctly (with parameter value constraint)" do
         c = Command.new ["hi", Parameter.new(:name, "", ["alice", "bob", "charlie rose"])]
 
-        c.match("hi alice").should == ["alice"]
-        c.match("hi bob").should == ["bob"]
-        c.match("hi 'charlie rose'").should == ["charlie rose"]
-        c.match("hi charlie rose").should be_nil
-        c.match("hi zack").should be_nil
-        c.match("hi ali").should be_nil
+        c.match(["hi", "alice"]).should == ["alice"]
+        c.match(["hi", "bob"]).should == ["bob"]
+        c.match(["hi", "charlie rose"]).should == ["charlie rose"]
+
+        c.match(["hi", "zack"]).should be_nil
+        c.match(["hi", "ali"]).should be_nil
       end
 
     end
@@ -68,9 +54,10 @@ describe Prompt::Command do
       it "matches correctly" do
         c = Command.new ["hi", Parameter.new(:first), Parameter.new(:last)]
 
-        c.match("hi agent smith").should == ["agent", "smith"]
-        c.match("hi agent").should be_nil
-        c.match("hi agent smith guy").should be_nil
+        c.match(%w(hi agent smith)).should == ["agent", "smith"]
+
+        c.match(%w(hi agent)).should be_nil
+        c.match(%w(hi agent smith guy)).should be_nil
       end
 
     end
@@ -80,12 +67,12 @@ describe Prompt::Command do
       it "matches correctly" do
         c = Command.new ["say", GlobParameter.new(:stuff)]
 
-        c.match("say hello").should == [["hello"]]
-        c.match("say hello world").should == [["hello", "world"]]
-        c.match("say hello  world").should == [["hello", "world"]]
-        c.match("say  hello  world").should == [["hello", "world"]]
-        c.match("say 'hello world'").should == [["hello world"]]
-        c.match('say "hello world"').should == [["hello world"]]
+        c.match(["say", "hello"]).should == [["hello"]]
+        c.match(["say", "hello", "world"]).should == [["hello", "world"]]
+      end
+
+      pending do
+        c.match(["say", "hello", ""]).should == [["hello", ""]]
       end
 
     end
@@ -95,10 +82,11 @@ describe Prompt::Command do
       it "matches correctly" do
         c = Command.new ["say", GlobParameter.new(:stuff), Parameter.new(:adverb)]
 
-        c.match("say hello").should be_nil
-        c.match("say hello loudly").should == [["hello"], "loudly"]
-        c.match("say hello world loudly").should == [["hello", "world"], "loudly"]
-        c.match("say hello 'world loudly'").should == [["hello"], "world loudly"]
+        c.match(["say", "hello", "world"]).should == [["hello"], "world"]
+        c.match(["say", "hello", "world", "loudly"]).should == [["hello", "world"], "loudly"]
+        c.match(["say", "hello", "world loudly"]).should == [["hello"], "world loudly"]
+
+        c.match(["say", "hello"]).should be_nil
       end
 
     end
@@ -108,10 +96,10 @@ describe Prompt::Command do
       it "matches correctly" do
         c = Command.new ["say", GlobParameter.new(:first), GlobParameter.new(:second)]
 
-        c.match("say one").should be_nil
-        c.match("say one two").should == [["one"], ["two"]]
-        c.match("say one two three").should == [["one", "two"], ["three"]]
-        c.match("say one 'two three'").should == [["one"], ["two three"]]
+        c.match(["say", "one"]).should be_nil
+        c.match(["say", "one", "two"]).should == [["one"], ["two"]]
+        c.match(["say", "one", "two", "three"]).should == [["one", "two"], ["three"]]
+        c.match(["say", "one", "two three"]).should == [["one"], ["two three"]]
       end
 
     end

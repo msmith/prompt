@@ -27,7 +27,8 @@ module Prompt
 
       while line = Readline.readline(Prompt.application.prompt, true)
         begin
-          Prompt.application.exec(line).nil?
+          words = split(line)
+          Prompt.application.exec words
         rescue ::Prompt::CommandNotFound => e
           STDERR.puts e.message
         end
@@ -50,6 +51,30 @@ module Prompt
         end
       end
     end
+
+    private
+
+    S_QUOTED_ARG = /'([^']*)'/
+    D_QUOTED_ARG = /"([^"]*)"/
+    UNQUOTED_ARG = /[^\s]+/
+
+    # Splits a command string into a word list.
+    # This understands how to make "quoted strings" into a single word
+    def self.split command
+      args = []
+      ss = StringScanner.new(command)
+      ss.scan(/\s+/)
+      until ss.eos?
+        if ss.scan(S_QUOTED_ARG) or ss.scan(D_QUOTED_ARG)
+          args << ss[1]
+        elsif arg = ss.scan(UNQUOTED_ARG)
+          args << arg
+        end
+        ss.scan(/\s+/)
+      end
+      args
+    end
+
 
   end # module Console
 end
