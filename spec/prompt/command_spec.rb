@@ -42,9 +42,7 @@ describe Prompt::Command do
         c.match(["hi", "alice"]).should == ["alice"]
         c.match(["hi", "bob"]).should == ["bob"]
         c.match(["hi", "charlie rose"]).should == ["charlie rose"]
-
-        c.match(["hi", "zack"]).should be_nil
-        c.match(["hi", "ali"]).should be_nil
+        c.match(["hi", "zack"]).should == ["zack"]
       end
 
     end

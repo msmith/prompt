@@ -12,11 +12,7 @@ module Prompt
     end
 
     def regex
-      if values
-        "(?<#{name}>#{values.map{|v| Regexp.escape(v)}.join("|")})"
-      else
-        "(?<#{name}>([^#{Prompt::Command::SEP}]*))"
-      end
+      "(?<#{name}>[^#{Prompt::Command::SEP}]*)"
     end
 
     def expansions(starting_with = "")

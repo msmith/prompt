@@ -119,23 +119,23 @@ end
 
 ### Defining parameters
 
-It's not necessary to define a parameter before using it in a command, but doing so will allow you to provide a useful description and valid values for the parameter.
+It's not necessary to define a parameter before using it in a command, but doing so will allow you to provide a useful description and list of possible completions for the parameter.
 
 ```ruby
 param :name, "Description"
 ```
 
-### Specifying a static list of valid values
+### Specifying a static list of completions
 
-You can specify a static list of valid values for a parameter.  These will be expanded when using tab completion.
+You can specify a static list of values for a parameter.  These will be used during tab completion.
 
 ```ruby
 param :name, "Description", %w(value1 value2)
 ```
 
-### Specifying a dynamic list of valid values
+### Specifying a dynamic list of completions
 
-Instead of a static list, you can specify a block that will dynamically return a list of valid values for a parameter.  These will also be expanded when using tab completion.
+You can also return the list of completions dynamically, by using a block.
 
 ```ruby
 param :file, "JPG file" do
