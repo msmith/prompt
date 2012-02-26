@@ -63,13 +63,13 @@ describe Prompt::Console do
       end
     end
 
-    context "quoted with unqoted" do
+    context "quoted substrings" do
       {
         "'one'two"     => %w(onetwo),
         "'one''two'"   => %w(onetwo),
         "'one'\"two\"" => %w(onetwo)
       }.each do |line, words|
-        pending line do
+        it line do
           Console.split(line).should == words
         end
       end

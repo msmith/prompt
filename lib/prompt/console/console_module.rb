@@ -1,5 +1,6 @@
 require 'readline'
 require 'prompt'
+require 'strscan'
 
 module Prompt
   module Console
@@ -58,18 +59,24 @@ module Prompt
     D_QUOTED_ARG = /"([^"]*)"/
     UNQUOTED_ARG = /[^\s]+/
 
-    # Splits a command string into a word list.
+    # Splits a command string into an argument (word) list.
     # This understands how to make "quoted strings" into a single word
     def self.split command
       args = []
       ss = StringScanner.new(command)
       ss.scan(/\s+/)
       until ss.eos?
-        if ss.scan(S_QUOTED_ARG) or ss.scan(D_QUOTED_ARG)
-          args << ss[1]
-        elsif arg = ss.scan(UNQUOTED_ARG)
-          args << arg
+        arg = ""
+        while true
+          segment = if ss.scan(S_QUOTED_ARG) or ss.scan(D_QUOTED_ARG)
+            ss[1]
+          else
+            ss.scan(UNQUOTED_ARG)
+          end
+          break unless segment
+          arg << segment
         end
+        args << arg
         ss.scan(/\s+/)
       end
       args
