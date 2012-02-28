@@ -33,6 +33,8 @@ module Prompt
     def usage
       @words.map do |word|
         case word
+        when GlobParameter
+          "<#{word.name}> ..."
         when Parameter
           "<#{word.name}>"
         else
