@@ -31,19 +31,17 @@ module Prompt
 
     def completions line_starting_with, word_starting_with
       args = Console.split(line_starting_with)
-      arg_idx = word_index(line_starting_with)
-      all_expansions(args[0,arg_idx], word_starting_with)
+      last_idx = index_of_last_word(line_starting_with)
+      all_expansions(args[0,last_idx], word_starting_with)
     end
 
     private
 
-    def word_index line
+    def index_of_last_word line
       ss = StringScanner.new(line)
       ss.scan(/\s+/)
       idx = 0
-      while ss.scan(/[^\s]+\s+/)
-        idx += 1
-      end
+      idx += 1 while ss.scan(/[^\s]+\s+/)
       idx
     end
 
