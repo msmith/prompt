@@ -3,26 +3,30 @@ module Prompt
 
     attr :name
     attr :desc
-    attr :values
 
-    def initialize(name, desc = nil, values = nil)
+    def initialize(name, desc = nil, values = nil, &block)
       @name = name
       @desc = desc
-      @values = values
+      @values = values || []
+      @proc = block if block_given?
     end
 
     def regex
       "(?<#{name}>[^#{Prompt::Command::SEP}]*)"
     end
 
+    def clear_cached_values
+      @cached_value = nil
+    end
+
     def expansions(starting_with = "")
-      if values
-        values.select{ |v| v.start_with? starting_with }.map do |v|
-          (v =~ /\s/) ?  "\"#{v}\"" : v
-        end
+      all = if @proc
+        @cached_value = @proc.call
       else
-        []
+        @values
       end
+
+      all.grep /^#{starting_with}/
     end
 
     def matches s

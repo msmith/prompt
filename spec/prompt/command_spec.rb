@@ -154,9 +154,9 @@ describe Prompt::Command do
     it "expands correctly if parameter values have spaces" do
       speed = Parameter.new(:speed, "", ["fast", "very fast"])
       c = Command.new(["go", speed])
-      c.expansions(1, "").should == ['fast', '"very fast"']
+      c.expansions(1, "").should == ['fast', 'very fast']
       c.expansions(1, "f").should == ['fast']
-      c.expansions(1, "v").should == ['"very fast"']
+      c.expansions(1, "v").should == ['very fast']
     end
   end
 

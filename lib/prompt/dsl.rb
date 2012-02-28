@@ -1,5 +1,4 @@
 require 'prompt/parameter'
-require 'prompt/proc_parameter'
 require 'prompt/glob_parameter'
 require 'prompt/dsl_helper'
 
@@ -28,10 +27,10 @@ module Prompt
     def param(name, desc, values = nil, &block)
       @parameters = [] unless defined? @parameters
       raise "parameter :#{name} is already defined" if @parameters.find {|v| v.name == name}
-      if block
-        @parameters << ProcParameter.new(name, desc, &block)
+      @parameters << if block
+        Parameter.new(name, desc, &block)
       else
-        @parameters << Parameter.new(name, desc, values)
+        Parameter.new(name, desc, values)
       end
     end
 
