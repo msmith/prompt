@@ -38,7 +38,9 @@ command "pwd", "Print current directory" do
   puts @pwd
 end
 
-param :file, "File"
+param :file, "File" do
+  Dir.entries(@pwd)
+end
 
 command "cp *file :dir", "Copy one or more files to dest" do |files, dir|
   puts "Copying #{files.length} file(s) to #{dir}"

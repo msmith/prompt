@@ -1,14 +1,8 @@
 module Prompt
-  class GlobParameter < Parameter
-
-    SEP = Prompt::Command::SEP
-
-    def initialize(name, desc = nil)
-      super(name, desc)
-    end
+  class MultiMatcher < Matcher
 
     def regex
-      "(?<#{name}>([^#{SEP}]*)(#{SEP}[^#{SEP}]*)*)"
+      "(?<#{parameter.name}>([^#{SEP}]*)(#{SEP}[^#{SEP}]*)*)"
     end
 
     def matches s

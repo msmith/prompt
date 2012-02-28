@@ -1,4 +1,5 @@
 require 'prompt'
+require 'spec_helper'
 
 include Prompt
 
@@ -26,7 +27,7 @@ describe Prompt::Command do
     describe "hi :name" do
 
       it "matches correctly" do
-        c = Command.new ["hi", Parameter.new(:name)]
+        c = Command.new ["hi", matcher(:name)]
 
         c.match(["hi", "guy"]).should == ["guy"]
         c.match(["hi", "some guy"]).should == ["some guy"]
@@ -37,7 +38,8 @@ describe Prompt::Command do
       end
 
       it "matches correctly (with parameter value constraint)" do
-        c = Command.new ["hi", Parameter.new(:name, "", ["alice", "bob", "charlie rose"])]
+        name = Parameter.new(:name, "", ["alice", "bob", "charlie rose"])
+        c = Command.new ["hi", matcher(name)]
 
         c.match(["hi", "alice"]).should == ["alice"]
         c.match(["hi", "bob"]).should == ["bob"]
@@ -50,7 +52,7 @@ describe Prompt::Command do
     describe "hi :first :last" do
 
       it "matches correctly" do
-        c = Command.new ["hi", Parameter.new(:first), Parameter.new(:last)]
+        c = Command.new ["hi", matcher(:first), matcher(:last)]
 
         c.match(%w(hi agent smith)).should == ["agent", "smith"]
 
@@ -63,7 +65,7 @@ describe Prompt::Command do
     describe "say *stuff" do
 
       it "matches correctly" do
-        c = Command.new ["say", GlobParameter.new(:stuff)]
+        c = Command.new ["say", multi_matcher(:stuff)]
 
         c.match(["say", "hello"]).should == [["hello"]]
         c.match(["say", "hello", "world"]).should == [["hello", "world"]]
@@ -76,7 +78,7 @@ describe Prompt::Command do
     describe "say *stuff :adverb" do
 
       it "matches correctly" do
-        c = Command.new ["say", GlobParameter.new(:stuff), Parameter.new(:adverb)]
+        c = Command.new ["say", multi_matcher(:stuff), matcher(:adverb)]
 
         c.match(["say", "hello", "world"]).should == [["hello"], "world"]
         c.match(["say", "hello", "world", "loudly"]).should == [["hello", "world"], "loudly"]
@@ -90,7 +92,7 @@ describe Prompt::Command do
     describe "say *first *second" do
 
       it "matches correctly" do
-        c = Command.new ["say", GlobParameter.new(:first), GlobParameter.new(:second)]
+        c = Command.new ["say", multi_matcher(:first), multi_matcher(:second)]
 
         c.match(["say", "one"]).should be_nil
         c.match(["say", "one", "two"]).should == [["one"], ["two"]]
@@ -105,11 +107,11 @@ describe Prompt::Command do
   describe "#parameters" do
     it "returns correctly" do
       color = Parameter.new(:color, "")
-      flavor = GlobParameter.new(:flavor, "")
+      flavor = Parameter.new(:flavor, "")
 
       Command.new(["one"]).parameters.should == []
-      Command.new(["one", color]).parameters.should == [color]
-      Command.new(["one", color, flavor]).parameters == [color, flavor]
+      Command.new(["one", matcher(color)]).parameters.should == [color]
+      Command.new(["one", matcher(color), matcher(flavor)]).parameters == [color, flavor]
     end
   end
 
@@ -132,7 +134,7 @@ describe Prompt::Command do
     end
 
     it "expands correctly with undefined parameters" do
-      c = Command.new(["go", Parameter.new(:dir)])
+      c = Command.new(["go", matcher(:dir)])
       c.expansions(0, "").should == ["go"]
       c.expansions(0, "g").should == ["go"]
       c.expansions(0, "go").should == ["go"]
@@ -141,11 +143,11 @@ describe Prompt::Command do
 
     it "expands correctly with defined parameters" do
       dir = Parameter.new(:dir, "", DIRECTIONS)
-      c = Command.new(["go", dir])
+      c = Command.new(["go", matcher(dir)])
       c.expansions(1, "").should == DIRECTIONS
 
       speed = Parameter.new(:speed, "", SPEEDS)
-      c = Command.new(["go", dir, speed])
+      c = Command.new(["go", matcher(dir), matcher(speed)])
       c.expansions(2, "").should == SPEEDS
       c.expansions(2, "slow").should == SPEEDS
       c.expansions(2, "slowe").should == ["slower"]
@@ -153,7 +155,7 @@ describe Prompt::Command do
 
     it "expands correctly if parameter values have spaces" do
       speed = Parameter.new(:speed, "", ["fast", "very fast"])
-      c = Command.new(["go", speed])
+      c = Command.new(["go", matcher(speed)])
       c.expansions(1, "").should == ['fast', 'very fast']
       c.expansions(1, "f").should == ['fast']
       c.expansions(1, "v").should == ['very fast']
@@ -165,8 +167,8 @@ describe Prompt::Command do
       color = Parameter.new(:color, "")
 
       Command.new(["one"]).usage.should == "one"
-      Command.new(["one", color]).usage.should == "one <color>"
-      Command.new(["one", color, "three"]).usage.should == "one <color> three"
+      Command.new(["one", matcher(color)]).usage.should == "one <color>"
+      Command.new(["one", matcher(color), "three"]).usage.should == "one <color> three"
     end
   end
 

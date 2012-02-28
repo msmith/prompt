@@ -1,5 +1,8 @@
 require 'prompt/command_group'
 require 'prompt/command'
+require 'prompt/matcher'
+require 'prompt/simple_matcher'
+require 'prompt/multi_matcher'
 
 module Prompt
   class Application
@@ -56,7 +59,7 @@ module Prompt
     end
 
     def all_expansions(args, partial_arg)
-      commands.select { |c| c.start_with? args }.map do |c|
+      commands.select { |c| c.could_match? args }.map do |c|
         c.expansions(args.length, partial_arg)
       end.flatten(1)
     end

@@ -11,10 +11,6 @@ module Prompt
       @proc = block if block_given?
     end
 
-    def regex
-      "(?<#{name}>[^#{Prompt::Command::SEP}]*)"
-    end
-
     def clear_cached_values
       @cached_value = nil
     end
@@ -27,10 +23,6 @@ module Prompt
       end
 
       all.grep /^#{starting_with}/
-    end
-
-    def matches s
-      s
     end
 
   end

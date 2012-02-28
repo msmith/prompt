@@ -17,7 +17,8 @@ module Prompt
       @action = block
 
       @name = words.join(" ")
-      @parameters = words.select {|w| w.kind_of? Parameter}
+      @matchers = words.select {|w| w.kind_of?(Matcher) }
+      @parameters = @matchers.map { |m| m.parameter }
     end
 
     def run args
@@ -25,18 +26,18 @@ module Prompt
     end
 
     def match words
-      if m = regex.match(words.join(SEP))
-        @parameters.map {|v| v.matches(m[v.name]) }
+      if args = regex.match(words.join(SEP))
+        @matchers.map {|m| m.matches(args[m.parameter.name]) }
       end
     end
 
     def usage
       @words.map do |word|
         case word
-        when GlobParameter
-          "<#{word.name}> ..."
-        when Parameter
-          "<#{word.name}>"
+        when MultiMatcher
+          "<#{word.parameter.name}> ..."
+        when Matcher
+          "<#{word.parameter.name}>"
         else
           word
         end
@@ -51,23 +52,32 @@ module Prompt
 
     def expansions(word_idx, starting_with)
       # TODO - combine glob parameters with any that follow
-      word = @words[0..word_idx].find { |w| w.kind_of? GlobParameter }
+      word = @words[0..word_idx].find { |w| w.kind_of? MultiMatcher }
       word = word || @words[word_idx]
 
       return [] if word.nil?
 
       case word
-      when Parameter
-        word.expansions(starting_with)
+      when Matcher 
+        word.parameter.expansions(starting_with)
       when String
         word.start_with?(starting_with) ? [word] : []
       end
     end
 
-    def start_with?(args)
-      args.zip(@words).all? do |a, w|
-        w == a or w.kind_of?(Parameter)
+    def could_match?(words)
+      words.each_with_index do |w, i|
+        word = @words[i]
+        case word
+        when nil
+          return false
+        when MultiMatcher
+          return true
+        when String
+          return false unless word.start_with?(w)
+        end
       end
+      return true
     end
 
     private
@@ -76,7 +86,7 @@ module Prompt
       begin
         regex_strs = @words.map do |word|
            case word
-           when Parameter
+           when Matcher
              word.regex
            else
              Regexp.escape(word)

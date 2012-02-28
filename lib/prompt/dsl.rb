@@ -1,5 +1,4 @@
 require 'prompt/parameter'
-require 'prompt/glob_parameter'
 require 'prompt/dsl_helper'
 
 module Prompt
