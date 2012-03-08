@@ -28,6 +28,7 @@ module Prompt
       while line = Readline.readline(Prompt.application.prompt, true)
         begin
           words = split(line)
+          next if words == []
           Prompt.application.exec words
         rescue CommandNotFound
           STDERR.puts "Command not found: #{line}"
