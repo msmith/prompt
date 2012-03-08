@@ -44,7 +44,7 @@ Tab completion is hooked up automatically after you define your commands and par
     $ my_app
     > g<TAB>
     > go <TAB>
-    go east   go north  go south  go west
+    east   north  south  west
     > go n<TAB>
     > go north
 
@@ -86,12 +86,12 @@ The `help` command is built-in.  It will print all of the commands that you've d
 You can put commands in logical groups.  This only affects how help is printed.
 
 ```ruby
-group "Taco commands"
+group "File commands"
 
 command ...
 command ...
 
-group "Burger commands"
+group "Directory commands"
 
 command ...
 ```
@@ -112,8 +112,8 @@ Here, the parameters are named `first` and `last`.  Their values are be passed a
 Each `:parameter` only matches a single word.  If you want to match multiple words to one parameter, use a `*parameter`.
 
 ```ruby
-command "say *word" do |words|
-  puts "You said #{words.length} words"
+command "cp *file :dest" do |files, dest|
+  puts "You copied #{files.length} files to #{dest}"
 end
 ```
 
@@ -125,17 +125,15 @@ It's not necessary to define a parameter before using it in a command, but doing
 param :name, "Description"
 ```
 
-### Specifying a static list of completions
+### Specifying parameter completions
 
-You can specify a static list of values for a parameter.  These will be used during tab completion.
+You can specify the completions for a parameter as a static list:
 
 ```ruby
-param :name, "Description", %w(value1 value2)
+param :color, "A color", %w(red green blue)
 ```
 
-### Specifying a dynamic list of completions
-
-You can also return the list of completions dynamically, by using a block.
+or as a dynamically-generated one:
 
 ```ruby
 param :file, "JPG file" do
