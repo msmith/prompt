@@ -2,9 +2,12 @@
 
 This is updated when a new version is pushed to http://rubygems.org
 
-## HEAD
+## 0.1.0 (Mar 8, 2011)
 
 * DSL change: `desc` was renamed to `group`
+* Tab completion will now list only the completions for the current word, instead of
+  the whole command.  This makes it behave like bash and works much better with `*params`
+* Hitting ENTER with an empty line will no longer print a Command Not Found error
 
 ## 0.0.3 (Feb 22, 2011)
 
