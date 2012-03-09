@@ -21,6 +21,8 @@ module Prompt
         save_history history_file if history_file
       end
 
+      trap('INT') { puts; exit }
+
       Readline.completion_proc = CompletionProc
 
       load_history history_file if history_file
