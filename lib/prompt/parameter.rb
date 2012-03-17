@@ -12,12 +12,12 @@ module Prompt
     end
 
     def clear_cached_values
-      @cached_value = nil
+      @cached_values = nil
     end
 
     def completions(starting_with = "")
       all = if @proc
-        @cached_value = @proc.call
+        @cached_values ||= @proc.call
       else
         @values
       end

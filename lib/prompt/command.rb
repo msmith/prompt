@@ -46,7 +46,7 @@ module Prompt
 
     def clear_cached_values
       @parameters.each do |p|
-        p.clear_cached_value if p.respond_to?(:clear_cached_value)
+        p.clear_cached_values if p.respond_to?(:clear_cached_values)
       end
     end
 

@@ -170,6 +170,20 @@ describe Prompt::Command do
       c.completions(2, "").should == (SPEEDS + DIRECTIONS)
       c.completions(1, "s").should == (SPEEDS + DIRECTIONS).grep(/^s/)
     end
+
+    it "caches dynamic parameters" do
+      year = Parameter.new(:year, "", "") do
+        Range.new(1, 100).to_a.map &:to_s
+      end
+      c = Command.new [matcher(year)]
+      Range.should_receive(:new).once.and_return(["42"])
+      c.completions(0, "").should == ["42"]
+      c.completions(0, "").should == ["42"] # this time it should be cached
+      c.clear_cached_values
+      Range.should_receive(:new).once.and_return(["44"])
+      c.completions(0, "").should == ["44"]
+    end
+
   end
 
   describe "#usage" do

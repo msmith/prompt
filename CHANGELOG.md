@@ -7,6 +7,7 @@ This is updated when a new version is pushed to http://rubygems.org
 * Exit immediately on Ctrl-C
 * Tab completing a `*param` will now include the completions for the following word
   if the `*param` has already been matched at least once
+* [BUG] Use the cached parameter values, when available
 
 ## 0.1.0 (Mar 8, 2011)
 
