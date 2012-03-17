@@ -160,6 +160,16 @@ describe Prompt::Command do
       c.expansions(1, "f").should == ['fast']
       c.expansions(1, "v").should == ['very fast']
     end
+
+    it "expands correctly when *param is followed by :param" do
+      speed = Parameter.new(:speed, "", SPEEDS)
+      dir = Parameter.new(:dir, "", DIRECTIONS)
+      c = Command.new [multi_matcher(speed), matcher(dir)]
+      c.expansions(0, "").should == SPEEDS
+      c.expansions(1, "").should == (SPEEDS + DIRECTIONS)
+      c.expansions(2, "").should == (SPEEDS + DIRECTIONS)
+      c.expansions(1, "s").should == (SPEEDS + DIRECTIONS).grep(/^s/)
+    end
   end
 
   describe "#usage" do

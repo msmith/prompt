@@ -51,17 +51,16 @@ module Prompt
     end
 
     def expansions(word_idx, starting_with)
-      # TODO - combine glob parameters with any that follow
-      word = @words[0..word_idx].find { |w| w.kind_of? MultiMatcher }
-      word = word || @words[word_idx]
-
+      idx = @words[0...word_idx].find_index { |w| w.kind_of? MultiMatcher } || word_idx
+      word = @words[idx]
       return [] if word.nil?
 
-      case word
-      when Matcher 
-        word.parameter.expansions(starting_with)
-      when String
-        word.start_with?(starting_with) ? [word] : []
+      next_word = @words[idx+1]
+
+      if idx < word_idx and next_word
+        completions_for(word, starting_with) + completions_for(next_word, starting_with)
+      else
+        completions_for(word, starting_with)
       end
     end
 
@@ -93,6 +92,15 @@ module Prompt
            end
         end
         Regexp.new("^#{regex_strs.join(SEP)}$")
+      end
+    end
+
+    def completions_for(word, starting_with)
+      case word
+      when Matcher
+        word.parameter.expansions(starting_with)
+      when String
+        word.start_with?(starting_with) ? [word] : []
       end
     end
 

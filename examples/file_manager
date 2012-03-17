@@ -39,7 +39,9 @@ command "pwd", "Print current directory" do
 end
 
 param :file, "File" do
-  Dir.entries(@pwd)
+  Dir.entries(@pwd).select do |e|
+    File.file?(File.join(@pwd, e))
+  end
 end
 
 command "cp *file :dir", "Copy one or more files to dest" do |files, dir|
