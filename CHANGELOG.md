@@ -2,7 +2,7 @@
 
 This is updated when a new version is pushed to http://rubygems.org
 
-## HEAD
+## 0.2.0 (Mar 17, 2012)
 
 * Exit immediately on Ctrl-C
 * Tab completing a `*param` will now include the completions for the following word
