@@ -50,7 +50,7 @@ module Prompt
       end
     end
 
-    def expansions(word_idx, starting_with)
+    def completions(word_idx, starting_with)
       idx = @words[0...word_idx].find_index { |w| w.kind_of? MultiMatcher } || word_idx
       word = @words[idx]
       return [] if word.nil?
@@ -98,7 +98,7 @@ module Prompt
     def completions_for(word, starting_with)
       case word
       when Matcher
-        word.parameter.expansions(starting_with)
+        word.parameter.completions(starting_with)
       when String
         word.start_with?(starting_with) ? [word] : []
       end

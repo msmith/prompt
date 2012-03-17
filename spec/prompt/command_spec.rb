@@ -115,60 +115,60 @@ describe Prompt::Command do
     end
   end
 
-  describe "#expansions" do
+  describe "#completions" do
 
     it "expands correctly with no parameters" do
       c = Command.new ["one"]
-      c.expansions(0, "").should == ["one"]
-      c.expansions(0, "on").should == ["one"]
-      c.expansions(0, "z").should == []
-      c.expansions(1, "").should == []
+      c.completions(0, "").should == ["one"]
+      c.completions(0, "on").should == ["one"]
+      c.completions(0, "z").should == []
+      c.completions(1, "").should == []
 
       c = Command.new ["help", "-v"]
-      c.expansions(0, "").should == ["help"]
-      c.expansions(0, "he").should == ["help"]
-      c.expansions(0, "z").should == []
-      c.expansions(1, "").should == ["-v"]
-      c.expansions(1, "-v").should == ["-v"]
-      c.expansions(1, "z").should == []
+      c.completions(0, "").should == ["help"]
+      c.completions(0, "he").should == ["help"]
+      c.completions(0, "z").should == []
+      c.completions(1, "").should == ["-v"]
+      c.completions(1, "-v").should == ["-v"]
+      c.completions(1, "z").should == []
     end
 
     it "expands correctly with undefined parameters" do
       c = Command.new(["go", matcher(:dir)])
-      c.expansions(0, "").should == ["go"]
-      c.expansions(0, "g").should == ["go"]
-      c.expansions(0, "go").should == ["go"]
-      c.expansions(1, "").should == []
+      c.completions(0, "").should == ["go"]
+      c.completions(0, "g").should == ["go"]
+      c.completions(0, "go").should == ["go"]
+      c.completions(1, "").should == []
     end
 
     it "expands correctly with defined parameters" do
       dir = Parameter.new(:dir, "", DIRECTIONS)
       c = Command.new(["go", matcher(dir)])
-      c.expansions(1, "").should == DIRECTIONS
+      c.completions(1, "").should == DIRECTIONS
 
       speed = Parameter.new(:speed, "", SPEEDS)
       c = Command.new(["go", matcher(dir), matcher(speed)])
-      c.expansions(2, "").should == SPEEDS
-      c.expansions(2, "slow").should == SPEEDS
-      c.expansions(2, "slowe").should == ["slower"]
+      c.completions(2, "").should == SPEEDS
+      c.completions(2, "slow").should == SPEEDS
+      c.completions(2, "slowe").should == ["slower"]
     end
 
     it "expands correctly if parameter values have spaces" do
       speed = Parameter.new(:speed, "", ["fast", "very fast"])
       c = Command.new(["go", matcher(speed)])
-      c.expansions(1, "").should == ['fast', 'very fast']
-      c.expansions(1, "f").should == ['fast']
-      c.expansions(1, "v").should == ['very fast']
+      c.completions(1, "").should == ['fast', 'very fast']
+      c.completions(1, "f").should == ['fast']
+      c.completions(1, "v").should == ['very fast']
     end
 
     it "expands correctly when *param is followed by :param" do
       speed = Parameter.new(:speed, "", SPEEDS)
       dir = Parameter.new(:dir, "", DIRECTIONS)
       c = Command.new [multi_matcher(speed), matcher(dir)]
-      c.expansions(0, "").should == SPEEDS
-      c.expansions(1, "").should == (SPEEDS + DIRECTIONS)
-      c.expansions(2, "").should == (SPEEDS + DIRECTIONS)
-      c.expansions(1, "s").should == (SPEEDS + DIRECTIONS).grep(/^s/)
+      c.completions(0, "").should == SPEEDS
+      c.completions(1, "").should == (SPEEDS + DIRECTIONS)
+      c.completions(2, "").should == (SPEEDS + DIRECTIONS)
+      c.completions(1, "s").should == (SPEEDS + DIRECTIONS).grep(/^s/)
     end
   end
 

@@ -35,7 +35,7 @@ module Prompt
     def completions line_starting_with, word_starting_with
       args = Console.split(line_starting_with)
       last_idx = index_of_last_word(line_starting_with)
-      all_expansions(args[0,last_idx], word_starting_with)
+      all_completions(args[0,last_idx], word_starting_with)
     end
 
     private
@@ -58,9 +58,9 @@ module Prompt
       @command_groups.map(&:commands).flatten(1)
     end
 
-    def all_expansions(args, partial_arg)
+    def all_completions(args, partial_arg)
       commands.select { |c| c.could_match? args }.map do |c|
-        c.expansions(args.length, partial_arg)
+        c.completions(args.length, partial_arg)
       end.flatten(1)
     end
 

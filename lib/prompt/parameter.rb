@@ -15,7 +15,7 @@ module Prompt
       @cached_value = nil
     end
 
-    def expansions(starting_with = "")
+    def completions(starting_with = "")
       all = if @proc
         @cached_value = @proc.call
       else
