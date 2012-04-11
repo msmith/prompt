@@ -4,8 +4,8 @@ require 'prompt'
 Gem::Specification.new do |s|
   s.name        = 'prompt'
   s.version     = Prompt::VERSION
-  s.summary     = 'A small framework that makes it easy to build slick command-line applications'
-  s.description = 'Prompt makes it easy to build slick command-line applications with Tab Completion, Command History, and Built-in Help'
+  s.summary     = 'A micro framework that makes it easy to build slick command-line applications'
+  s.description = 'Prompt makes it easy to build slick command-line applications with tab completion, command history, and built-in help'
   s.authors     = ["Mike Smith"]
   s.email       = 'mike@sticknet.net'
 

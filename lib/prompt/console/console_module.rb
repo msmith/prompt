@@ -15,13 +15,17 @@ module Prompt
     def self.start(history_file = nil)
       # Store the state of the terminal
       stty_save = `stty -g`.chomp
-      # and restore it when exiting
+      # ...and restore it when exiting
       at_exit do
         system('stty', stty_save)
         save_history history_file if history_file
       end
 
-      trap('INT') { puts; exit }
+      # Exit immediately on Ctrl-C
+      trap('INT') do
+        puts
+        exit
+      end
 
       Readline.completion_proc = CompletionProc
 

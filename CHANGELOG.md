@@ -2,6 +2,10 @@
 
 This is updated when a new version is pushed to http://rubygems.org
 
+## 1.0.0 (Apr 10, 2012)
+
+* Display suggestions when command is not found
+
 ## 0.2.0 (Mar 17, 2012)
 
 * Exit immediately on Ctrl-C
