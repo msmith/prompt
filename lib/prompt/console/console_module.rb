@@ -33,7 +33,7 @@ module Prompt
           next if words == []
           Prompt.application.exec words
         rescue CommandNotFound
-          STDERR.puts "Command not found: #{line}"
+          command_not_found line
         end
       end
     end
@@ -51,6 +51,19 @@ module Prompt
       if File.exist? file
         File.readlines(file).each do |line|
           Readline::HISTORY.push line.strip
+        end
+      end
+    end
+
+    def self.command_not_found line
+      words = self.split line
+      suggestions = Prompt.application.commands.select { |cmd| cmd.could_match? words }
+      if suggestions.empty?
+        puts "Command not found"
+      else
+        puts "Command not found. Did you mean one of these?"
+        suggestions.each do |cmd|
+          puts "  #{cmd.usage}"
         end
       end
     end

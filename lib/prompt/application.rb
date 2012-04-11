@@ -38,6 +38,10 @@ module Prompt
       all_completions(args[0,last_idx], word_starting_with)
     end
 
+    def commands
+      @command_groups.map(&:commands).flatten(1)
+    end
+
     private
 
     def index_of_last_word line
@@ -52,10 +56,6 @@ module Prompt
       commands.each do |c|
         c.clear_cached_values
       end
-    end
-
-    def commands
-      @command_groups.map(&:commands).flatten(1)
     end
 
     def all_completions(args, partial_arg)
