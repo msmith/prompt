@@ -61,7 +61,7 @@ module Prompt
     def all_completions(args, partial_arg)
       commands.select { |c| c.could_match? args }.map do |c|
         c.completions(args.length, partial_arg)
-      end.flatten(1)
+      end.flatten(1).sort.uniq
     end
 
     def current_command_group
