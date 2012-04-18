@@ -16,22 +16,25 @@ module Prompt
         print_help true
       end
 
-      command "exit" do
+      command "exit", "Exit the console" do
         exit
       end
 
       private
 
       def self.print_help verbose = false
+        commands = Prompt.application.commands
+        cmd_width = commands.map { |c| c.usage.length }.max
+
         Prompt.application.command_groups.each do |cg|
           puts
           puts cg.name
           puts
           cg.commands.each do |cmd|
-            puts "  %-40s %s" % [cmd.usage, cmd.desc]
+            puts "  %-#{cmd_width+4}s %s" % [cmd.usage, cmd.desc]
             if verbose
               cmd.parameters.each do |v|
-                puts " "*43 + ("%-10s %s" % ["<#{v.name}>", "#{v.desc}"])
+                puts " "*(cmd_width+7) + ("%-10s %s" % ["<#{v.name}>", "#{v.desc}"])
               end
             end
           end
