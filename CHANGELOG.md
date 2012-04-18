@@ -2,6 +2,11 @@
 
 This is updated when a new version is pushed to http://rubygems.org
 
+## 1.1.0 (Apr 18, 2012)
+
+* Format help command so that descriptions are always aligned
+* Rescue and print exceptions
+
 ## 1.0.0 (Apr 10, 2012)
 
 * Display suggestions when command is not found
