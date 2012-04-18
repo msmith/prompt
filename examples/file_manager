@@ -11,18 +11,21 @@ end
 @pwd = File.expand_path Dir.pwd
 change_prompt @pwd
 
-param :dir, "Directory" do
+desc "Directory"
+param :dir do
   Dir.entries(@pwd).select do |e|
     File.directory?(File.join(@pwd, e))
   end
 end
 
-command "cd :dir", "Change directory" do |dir|
+desc "Change directory"
+command "cd :dir" do |dir|
   @pwd = File.expand_path File.join(@pwd, dir)
   change_prompt @pwd
 end
 
-command "ls", "List files" do
+desc "List files"
+command "ls" do
   puts @pwd
   Dir.entries(@pwd).select do |e|
     path = File.join(@pwd, e)
@@ -34,17 +37,20 @@ command "ls", "List files" do
   end
 end
 
-command "pwd", "Print current directory" do
+desc "Print current directory"
+command "pwd" do
   puts @pwd
 end
 
-param :file, "File" do
+desc "File"
+param :file do
   Dir.entries(@pwd).select do |e|
     File.file?(File.join(@pwd, e))
   end
 end
 
-command "cp *file :dir", "Copy one or more files to dest" do |files, dir|
+desc "Copy one or more files to dest"
+command "cp *file :dir" do |files, dir|
   puts "Copying #{files.length} file(s) to #{dir}"
   # doesn't actually do it...
 end
