@@ -38,6 +38,8 @@ module Prompt
           Prompt.application.exec words
         rescue CommandNotFound
           command_not_found line
+        rescue => e
+          command_exception e
         end
       end
     end
@@ -70,6 +72,11 @@ module Prompt
           puts "  #{cmd.usage}"
         end
       end
+    end
+
+    def self.command_exception e
+      puts e.message
+      puts e.backtrace.map {|s| "  #{s}" }.join("\n")
     end
 
     private
