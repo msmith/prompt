@@ -11,7 +11,8 @@ group "Move"
 
 param :direction, "A cardinal direction", %w(north east south west)
 
-command "go :direction", "Walk in the specified direction" do |direction|
+desc "Walk in the specified direction"
+command "go :direction" do |direction|
   puts "You walked #{direction}"
   @moves += 1
   if @moves > GRUE
@@ -22,7 +23,8 @@ end
 
 group "Interact"
 
-command "look", "Look around" do
+desc "Look around"
+command "look" do
   if @moves < GRUE
   	puts "You're in a nice, well-lit room"
   else
@@ -30,7 +32,8 @@ command "look", "Look around" do
   end
 end
 
-command "say *something", "Say something" do |something|
+desc "Say something"
+command "say *something" do |something|
   puts "You say '#{something.join(" ")}'"
 end
 
