@@ -2,6 +2,15 @@
 
 This is updated when a new version is pushed to http://rubygems.org
 
+## 1.2.0 (Apr 21, 2012)
+
+* DSL change: Command descriptions can be provided using `desc`.  You can still
+  pass the description as an argument to `command`, but will be deprecated
+  in a future version. (thanks @kowsik)
+* Partially-typed strings are now passed when calling a parameter's block.  You
+  can use this to more efficiently build the list of completions.  This is
+  especially useful for things like database queries or other remote API calls.
+
 ## 1.1.0 (Apr 18, 2012)
 
 * Format help command so that descriptions are always aligned
