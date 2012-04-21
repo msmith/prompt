@@ -9,15 +9,16 @@ module Prompt
       @desc = desc
       @values = values || []
       @proc = block if block_given?
+      @cached_values = {}
     end
 
     def clear_cached_values
-      @cached_values = nil
+      @cached_values = {}
     end
 
     def completions(starting_with = "")
       all = if @proc
-        @cached_values ||= @proc.call
+        @cached_values[starting_with] ||= @proc.call(starting_with)
       else
         @values
       end

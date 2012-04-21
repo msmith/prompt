@@ -70,7 +70,7 @@ The `help` command is built-in.  It will print all of the commands that you've d
 
       help                                     List all commands
       help -v                                  List all commands, including parameters
-      exit
+      exit                                     Exit the console
 
     Move
 
@@ -138,6 +138,16 @@ or as a dynamically-generated one:
 ```ruby
 param :file, "JPG file" do
   Dir.glob "*.jpg"
+end
+```
+
+A dynamic parameter's block may optionally take the partially-typed word as
+a parameter, to further limit the completions.
+
+```ruby
+param :username do |starting_with|
+  # slow DB query
+  User.where("username LIKE '?%'", starting_with).map(&:username)
 end
 ```
 
