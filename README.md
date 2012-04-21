@@ -88,8 +88,8 @@ You can provide a description for a command before defining it.  Descriptions
 are displayed next to each comand in the built-in help.
 
 ```ruby
-desc "Lookup a user by email address"
-command "find :email" do
+desc "Look around"
+command "look" do
   ...
 end
 ```
