@@ -1,5 +1,3 @@
-# Prompt
-
 ## What is this?
 
 Prompt makes it easy to build slick command-line applications with Tab Completion, Command History, and Built-in Help
@@ -8,7 +6,7 @@ Prompt makes it easy to build slick command-line applications with Tab Completio
 
     gem install prompt
 
-## An example
+## Overview
 
 Commands are defined with a Sinatra-inspired DSL:
 
@@ -20,17 +18,20 @@ group "Move"
 
 param :direction, "A cardinal direction", %w(north east south west)
 
-command "go :direction", "Walk in the specified direction" do |direction|
+desc "Walk in the specified direction"
+command "go :direction" do |direction|
   puts "You walked #{direction} and were eaten by a grue."
 end
 
 group "Interact"
 
-command "look", "Look around" do
+desc "Look around"
+command "look" do
   puts "You're in a dark room."
 end
 
-command "say :something", "Say something" do |something|
+desc "Say something"
+command "say :something" do |something|
   puts "You say '#{something}'"
 end
 
@@ -68,18 +69,31 @@ The `help` command is built-in.  It will print all of the commands that you've d
     > help
     Console commands
 
-      help                                     List all commands
-      help -v                                  List all commands, including parameters
-      exit                                     Exit the console
+      help               List all commands
+      help -v            List all commands, including parameters
+      exit               Exit the console
 
     Move
 
-      go <direction>                           Walk in the specified direction
+      go <direction>     Walk in the specified direction
 
     Interact
 
-      look                                     Look around
-      say <something>                          Say something
+      look               Look around
+      say <something>    Say something
+
+## Describing commands
+
+You can provide a description for a command before defining it.  Descriptions
+are displayed next to each comand in the built-in help.
+
+```ruby
+desc "Lookup a user by email address"
+command "find :email" do
+  ...
+end
+```
+
 
 ## Grouping commands
 
