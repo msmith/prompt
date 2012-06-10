@@ -161,6 +161,14 @@ describe Prompt::Command do
       c.completions(1, "v").should == ['very fast']
     end
 
+    it "expand correctly if parameter values are not strings" do
+      nums = Parameter.new(:numbers, "", [1, 2, 3, 10])
+      c = Command.new(["guess", matcher(nums)])
+      c.completions(1, "1").should == ["1", "10"]
+      c.completions(1, "2").should == ["2"]
+      c.completions(1, "9").should == []
+    end
+
     it "expands correctly when *param is followed by :param" do
       speed = Parameter.new(:speed, "", SPEEDS)
       dir = Parameter.new(:dir, "", DIRECTIONS)

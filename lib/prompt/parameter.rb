@@ -23,7 +23,7 @@ module Prompt
         @values
       end
 
-      all.grep /^#{starting_with}/
+      all.map(&:to_s).grep /^#{starting_with}/
     end
 
   end
