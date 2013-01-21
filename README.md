@@ -160,8 +160,8 @@ a parameter, to further limit the completions.
 
 ```ruby
 param :username do |starting_with|
-  # slow DB query
-  User.where("username LIKE '?%'", starting_with).map(&:username)
+  # Query database for usernames that start with the partially-typed word
+  User.where("username LIKE '?%'", starting_with).pluck(:username)
 end
 ```
 
