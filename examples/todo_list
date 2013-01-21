@@ -1,0 +1,62 @@
+#!/usr/bin/env ruby
+
+require 'prompt'
+extend Prompt::DSL
+
+desc "List all your tasks"
+command "list" do
+  if @tasks.empty?
+    puts "Nothing to do!"
+  else
+    @tasks.each_with_index do |task, i|
+      puts "#{i}: #{task}"
+    end
+  end
+end
+
+desc "Add a task to to the bottom of the list"
+command "add :task" do |task|
+  @tasks << task
+end
+
+desc "'high' or 'low'"
+param :priority do
+  %w(high low)
+end
+
+desc "Add a task to to the top or bottom of the list"
+command "add :task :priority" do |task, priority|
+  if priority == "high"
+    @tasks.insert 0, task
+  else
+    @tasks << task
+  end
+end
+
+desc "Task number"
+param :num do
+  puts "here"
+  (0...@tasks.size).to_a
+end
+
+desc "Delete a task"
+command "del :num" do |num|
+  task = @tasks.delete_at num.to_i
+  puts "deleted #{task}" if task
+end
+
+desc "Delete all tasks"
+command "clear" do
+  count = clear
+  puts "deleted #{count} items"
+end
+
+def clear
+  old_size = @tasks.size
+  @tasks = []
+  old_size
+end
+
+@tasks = []
+
+Prompt::Console.start
