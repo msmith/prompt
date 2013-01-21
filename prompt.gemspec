@@ -4,8 +4,8 @@ require 'prompt'
 Gem::Specification.new do |s|
   s.name        = 'prompt'
   s.version     = Prompt::VERSION
-  s.summary     = 'A micro framework that makes it easy to build slick command-line applications'
-  s.description = 'Prompt makes it easy to build slick command-line applications with tab completion, command history, and built-in help'
+  s.summary     = 'A micro framework that makes it easy to build slick CLIs'
+  s.description = 'Prompt makes it easy to build slick CLIs with tab completion, command history, and built-in help'
   s.authors     = ["Mike Smith"]
   s.email       = 'mike@sticknet.net'
 
@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.files         += Dir["lib/**/*.rb"]
   s.files         += Dir["spec/**/*.rb"]
   s.files         += Dir["examples/**/*"]
-  s.homepage      = 'http://github.com/mudynamics/prompt'
+  s.homepage      = 'http://github.com/msmith/prompt'
 
   s.required_ruby_version = '>= 1.9.2' # because Readline.line_buffer is required
 end
