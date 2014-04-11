@@ -3,10 +3,11 @@
 Prompt makes it easy to build slick command-line applications with Tab Completion, Command History, and Built-in Help
 
 ## Installation
+[![Gem Version](https://badge.fury.io/rb/prompt.svg)](http://badge.fury.io/rb/prompt)
 
     gem install prompt
 
-## Overview
+## A simple example
 
 Commands are defined with a Sinatra-inspired DSL:
 
@@ -14,25 +15,18 @@ Commands are defined with a Sinatra-inspired DSL:
 require 'prompt'
 extend Prompt::DSL
 
-group "Move"
-
-param :direction, "A cardinal direction", %w(north east south west)
-
-desc "Walk in the specified direction"
-command "go :direction" do |direction|
-  puts "You walked #{direction} and were eaten by a grue."
-end
-
-group "Interact"
-
-desc "Look around"
 command "look" do
   puts "You're in a dark room."
 end
 
-desc "Say something"
 command "say :something" do |something|
   puts "You say '#{something}'"
+end
+
+param :direction, %w(north east south west)
+
+command "go :direction" do |direction|
+  puts "You walked #{direction} and were eaten by a grue."
 end
 
 Prompt::Console.start
@@ -147,7 +141,7 @@ You can specify the completions for a parameter as a static list:
 param :color, "A color", %w(red green blue)
 ```
 
-or as a dynamically-generated one:
+or you can dynamically generate the completions using a block:
 
 ```ruby
 param :file, "JPG file" do
